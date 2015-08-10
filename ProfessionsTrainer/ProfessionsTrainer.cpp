@@ -10,10 +10,10 @@ class ProfessionsTrainer_NPC : public CreatureScript
         public:
                 ProfessionsTrainer_NPC () : CreatureScript("ProfessionsTrainer_NPC") {}
                 
-                void CreatureWhisperBasedOnBool(const char *text, Creature *_creature, Player *pPlayer, bool value)
+				void CreatureWhisperBasedOnBool(const char *text, Creature *_creature, Player *pPlayer, bool value)
                 {
                         if (value)
-                                _creature->MonsterWhisper(text, pPlayer->GetGUID());
+							_creature->Whisper(text, LANG_UNIVERSAL, pPlayer);
                 }
 
                 uint32 PlayerMaxLevel() const
@@ -79,7 +79,6 @@ class ProfessionsTrainer_NPC : public CreatureScript
 
                         if (!SkillInfo)
                         {
-                                sLog->outError(LOG_FILTER_PLAYER_SKILLS, "Profession NPC: received non-valid skill ID (LearnAllRecipesInProfession)");
                                 return false;
                         }       
 
@@ -121,7 +120,7 @@ class ProfessionsTrainer_NPC : public CreatureScript
                                 if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, player, false))
                                         continue;
                                 
-                                player->learnSpell(skillLine->spellId, false);
+                                player->LearnSpell(skillLine->spellId, false);
                         }
                 }
 
@@ -133,11 +132,11 @@ class ProfessionsTrainer_NPC : public CreatureScript
                 void CompleteLearnProfession(Player *pPlayer, Creature *pCreature, SkillType skill)
                 {
                         if (PlayerAlreadyHasTwoProfessions(pPlayer) && !IsSecondarySkill(skill))
-                                pCreature->MonsterWhisper("You already know two professions!", pPlayer->GetGUID());
+                                pCreature->Whisper("You already know two professions!", LANG_UNIVERSAL, pPlayer);
                         else
                         {
                                 if (!LearnAllRecipesInProfession(pPlayer, skill))
-                                        pCreature->MonsterWhisper("Internal error occured!", pPlayer->GetGUID());
+									pCreature->Whisper("Internal error occured!", LANG_UNIVERSAL, pPlayer);
                         }
                 }
         
